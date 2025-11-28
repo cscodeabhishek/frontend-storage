@@ -1,36 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import Navbar from "../components/Navbar";
 import UploadButton from "../components/UploadButton";
 import Charts from "../components/Charts";
-import Pagination from "../components/Pagination";
-import { useRBAC } from "../rbac/RBACContext";
+import FileList from "../components/FileList";
+import { getFilesAPI } from "../api";
+import { useAuth } from "../context/AuthContext";
 
 const Dashboard = () => {
-  const { logout } = useRBAC();
+  const { user } = useAuth();
+  const [files, setFiles] = useState([]);
+
+  useEffect(() => {
+    if (user) {
+      getFilesAPI(user.token).then(setFiles);
+    }
+  }, [user]);
 
   return (
-    <div style={{ padding: "20px", position: "relative" }}>
-      {/* Logout Button */}
-      <button
-        onClick={logout}
-        style={{
-          position: "absolute",
-          top: 20,
-          right: 20,
-          background: "red",
-          color: "white",
-          padding: "8px 16px",
-          borderRadius: "5px",
-          border: "none",
-          cursor: "pointer",
-        }}
-      >
-        Logout
-      </button>
-
-      <h1>Dashboard</h1>
-      <UploadButton />
-      <Charts />
-      <Pagination />
+    <div>
+      <Navbar />
+      <div className="container">
+        <UploadButton />
+        <Charts data={files} />
+        <FileList files={files} />
+      </div>
     </div>
   );
 };

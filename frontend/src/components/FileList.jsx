@@ -1,18 +1,14 @@
 import React from "react";
+import FileCard from "./FileCard";
 
-export default function FileList({ files = [] }) {
-  if (!files.length) return <div>No files uploaded yet.</div>;
+const FileList = ({ files = [] }) => {
   return (
-    <div>
-      <h3>Files</h3>
-      <ul>
-        {files.map((f, i) => (
-          <li key={i}>
-            <a target="_blank" rel="noreferrer" href={f.url}>{f.originalname}</a>
-            {" — "}{(f.size/1024).toFixed(2)} KB
-          </li>
-        ))}
-      </ul>
+    <div className="file-grid">
+      {files.map(file => (
+        <FileCard key={file._id} file={file} />
+      ))}
     </div>
   );
-}
+};
+
+export default FileList;
