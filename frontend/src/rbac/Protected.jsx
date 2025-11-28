@@ -1,9 +1,19 @@
+import React from "react";
+import { Navigate } from "react-router-dom";
 import { useRBAC } from "./RBACContext";
 
-export default function Protected({ permission, children }) {
-  const { hasPermission } = useRBAC();
+const Protected = ({ children, requiredRole }) => {
+  const { user } = useRBAC();
 
-  if (!hasPermission(permission)) return null;
+  if (!user) {
+    return <Navigate to="/" replace />;
+  }
+
+  if (requiredRole && user.role !== requiredRole) {
+    return <p>Access Denied</p>;
+  }
 
   return children;
-}
+};
+
+export default Protected;

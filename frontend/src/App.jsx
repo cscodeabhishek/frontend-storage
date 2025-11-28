@@ -1,41 +1,21 @@
 import React from "react";
-import { Routes, Route, Link } from "react-router-dom";
-import { useRBAC } from "./rbac/RBACContext";
-
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
-import RBACPanel from "./pages/RBACPanel";
+import { RBACProvider } from "./rbac/RBACContext";
 
-export default function App() {
-  const { token, currentRole, setToken, setCurrentRole } = useRBAC();
-
-  function logout() {
-    setToken(null);
-    setCurrentRole("viewer");
-  }
-
+function App() {
   return (
-    <>
-      {/* Navigation */}
-      {token && (
-        <div className="card" style={{ margin: 12, display: "flex", gap: 20 }}>
-          <Link to="/">Dashboard</Link>
-          {currentRole === "admin" && <Link to="/rbac">RBAC Panel</Link>}
-
-          <div style={{ flex: 1 }}></div>
-
-          <span>Role: <b>{currentRole}</b></span>
-          <button className="btn" onClick={logout}>Logout</button>
-        </div>
-      )}
-
-      {/* Routes */}
-      <Routes>
-        {!token && <Route path="*" element={<Login />} />}
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/rbac" element={<RBACPanel />} />
-      </Routes>
-    </>
+    <RBACProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Navigate to="/login" />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Routes>
+      </Router>
+    </RBACProvider>
   );
 }
+
+export default App;

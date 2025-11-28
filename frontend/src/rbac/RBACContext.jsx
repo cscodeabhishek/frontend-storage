@@ -1,23 +1,18 @@
-import { createContext, useState, useContext } from "react";
-import { ROLES } from "./roles";
+import React, { createContext, useContext, useState } from "react";
 
 const RBACContext = createContext();
 
-export function RBACProvider({ children }) {
-  const [currentRole, setCurrentRole] = useState("viewer");
+export const RBACProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
 
-  function hasPermission(permission) {
-    return ROLES[currentRole].permissions.includes(permission);
-  }
+  const login = (userData) => setUser(userData);
+  const logout = () => setUser(null);
 
   return (
-    <RBACContext.Provider value={{ currentRole, setCurrentRole, hasPermission }}>
+    <RBACContext.Provider value={{ user, login, logout }}>
       {children}
     </RBACContext.Provider>
   );
-}
+};
 
-export function useRBAC() {
-  return useContext(RBACContext);
-}
-
+export const useRBAC = () => useContext(RBACContext);
