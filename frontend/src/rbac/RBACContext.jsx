@@ -5,8 +5,15 @@ const RBACContext = createContext();
 export const RBACProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  const login = (userData) => setUser(userData);
-  const logout = () => setUser(null);
+  const login = (userData) => {
+    setUser(userData);
+    localStorage.setItem("token", userData.token);
+  };
+
+  const logout = () => {
+    setUser(null);
+    localStorage.removeItem("token");
+  };
 
   return (
     <RBACContext.Provider value={{ user, login, logout }}>

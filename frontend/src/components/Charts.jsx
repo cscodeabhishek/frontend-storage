@@ -1,28 +1,41 @@
-import { PieChart, Pie, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import React from "react";
 
-export default function Charts({ files }) {
-  const countByType = {};
+const Charts = ({ data = [] }) => {
+  const safeData = Array.isArray(data) ? data : [];
 
-  files.forEach((f) => {
-    const ext = f.name.split(".").pop();
-    countByType[ext] = (countByType[ext] || 0) + 1;
+  const fileTypeCount = {};
+  safeData.forEach((file) => {
+    const ext = file.extension || "unknown";
+    fileTypeCount[ext] = (fileTypeCount[ext] || 0) + 1;
   });
 
-  const data = Object.entries(countByType).map(([type, count]) => ({
-    name: type,
-    value: count,
-  }));
-
   return (
-    <div style={{ height: 300, marginTop: 20 }}>
-      <h3>File Type Distribution</h3>
-      <ResponsiveContainer width="100%" height="100%">
-        <PieChart>
-          <Pie dataKey="value" data={data} fill="#8884d8" label />
-          <Tooltip />
-          <Legend />
-        </PieChart>
-      </ResponsiveContainer>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",     // horizontally center
+        alignItems: "center",          // vertically center (inside the container)
+        width: "100%",
+        marginTop: "20px",
+      }}
+    >
+      <div
+        style={{
+          padding: "20px",
+          background: "#fff",
+          borderRadius: "8px",
+          width: "60%",
+          textAlign: "center",         // centers the text
+          boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+        }}
+      >
+        <h3>Charts</h3>
+        <pre style={{ textAlign: "left" }}>
+          {JSON.stringify(fileTypeCount, null, 2)}
+        </pre>
+      </div>
     </div>
   );
-}
+};
+
+export default Charts;
