@@ -1,23 +1,26 @@
 import React, { useState } from "react";
-import { uploadFileAPI } from "../api";
+import { uploadFile } from "../api";
 import { useAuth } from "../context/AuthContext";
 
-const UploadButton = () => {
+const UploadButton = ({ onUpload }) => {
   const { user } = useAuth();
   const [file, setFile] = useState(null);
 
   const handleUpload = async () => {
-    if (!file) return alert("Select a file first!");
-    const res = await uploadFileAPI(file, user.token);
-    alert(res.message);
-    setFile(null);
-    window.location.reload(); // Refresh to show new file
+    if(!file) return alert("Select a file first!");
+    try {
+      await uploadFile(file, user.token);
+      alert("File uploaded!");
+      onUpload(); // refresh list
+    } catch(err) {
+      alert("Upload failed");
+    }
   };
 
   return (
-    <div className="upload-container">
-      <input type="file" onChange={e => setFile(e.target.files[0])} />
-      <button onClick={handleUpload}>Upload</button>
+    <div style={{ margin:"20px 0" }}>
+      <input type="file" onChange={e=>setFile(e.target.files[0])}/>
+      <button onClick={handleUpload} style={{ marginLeft:"10px", padding:"5px 10px", borderRadius:"4px", background:"#1976d2", color:"#fff", border:"none" }}>Upload</button>
     </div>
   );
 };

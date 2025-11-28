@@ -3,42 +3,41 @@ import { authLogin } from "../api";
 import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const { login } = useAuth();
+  const [email, setEmail] = useState("admin@gmail.com");
+  const [password, setPassword] = useState("admin123");
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await authLogin(email, password);
-      login(res.user);
-      setError("");
+      const data = await authLogin(email, password);
+      login(data.user);
     } catch (err) {
-      setError(err.message);
+      setError(err.response?.data?.message || "Login failed");
     }
   };
 
   return (
-    <div style={{ display: "flex", justifyContent: "center", marginTop: "100px" }}>
-      <form onSubmit={handleSubmit}>
+    <div style={{ display:"flex", justifyContent:"center", alignItems:"center", height:"100vh", background:"#f0f2f5" }}>
+      <form onSubmit={handleSubmit} style={{ padding:"30px", borderRadius:"8px", background:"#fff", width:"300px", boxShadow:"0 2px 8px rgba(0,0,0,0.2)" }}>
         <h2>Login</h2>
+        {error && <p style={{color:"red"}}>{error}</p>}
         <input
           type="email"
           placeholder="Email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e)=>setEmail(e.target.value)}
+          style={{ width:"100%", padding:"10px", margin:"10px 0" }}
         />
-        <br />
         <input
           type="password"
           placeholder="Password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e)=>setPassword(e.target.value)}
+          style={{ width:"100%", padding:"10px", margin:"10px 0" }}
         />
-        <br />
-        <button type="submit">Login</button>
-        {error && <p style={{ color: "red" }}>{error}</p>}
+        <button type="submit" style={{ width:"100%", padding:"10px", background:"#1976d2", color:"#fff", border:"none", borderRadius:"4px" }}>Login</button>
       </form>
     </div>
   );

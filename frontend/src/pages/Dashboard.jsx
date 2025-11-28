@@ -1,27 +1,31 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
-import UploadButton from "../components/UploadButton";
-import Charts from "../components/Charts";
 import FileList from "../components/FileList";
-import { getFilesAPI } from "../api";
+import UploadButton from "../components/UploadButton";
 import { useAuth } from "../context/AuthContext";
+import { getFiles } from "../api";
 
 const Dashboard = () => {
   const { user } = useAuth();
   const [files, setFiles] = useState([]);
 
-  useEffect(() => {
-    if (user) {
-      getFilesAPI(user.token).then(setFiles);
-    }
+  const fetchFiles = async () => {
+    if(!user) return;
+    const data = await getFiles(user.token);
+    setFiles(data);
+  };
+
+  useEffect(()=>{
+    fetchFiles();
   }, [user]);
+
+  if(!user) return <p>Please login first.</p>;
 
   return (
     <div>
       <Navbar />
-      <div className="container">
-        <UploadButton />
-        <Charts data={files} />
+      <div style={{ padding:"20px" }}>
+        <UploadButton onUpload={fetchFiles}/>
         <FileList files={files} />
       </div>
     </div>

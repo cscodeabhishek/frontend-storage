@@ -1,12 +1,11 @@
 import React from "react";
 import FileCard from "./FileCard";
 
-const FileList = ({ files = [] }) => {
+const FileList = ({ files }) => {
+  if(!files || files.length===0) return <p>No files uploaded yet.</p>;
   return (
-    <div className="file-grid">
-      {files.map(file => (
-        <FileCard key={file._id} file={file} />
-      ))}
+    <div style={{ display:"flex", flexWrap:"wrap" }}>
+      {files.map(f => <FileCard key={f._id} file={f} />)}
     </div>
   );
 };

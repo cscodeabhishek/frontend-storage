@@ -1,122 +1,77 @@
-/* Reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Roboto', sans-serif;
-}
-
 body {
-  background-color: #f5f5f5;
-  color: #333;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f0f2f5;
 }
 
-/* Buttons */
-button {
-  cursor: pointer;
-  padding: 10px 16px;
-  border: none;
-  border-radius: 6px;
-  background-color: #4285f4;
-  color: white;
-  font-weight: 500;
-  transition: background-color 0.2s ease;
+.login-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-button:hover {
-  background-color: #3367d6;
+.login-form {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  width: 300px;
+  text-align: center;
 }
 
-/* Inputs */
-input[type="text"],
-input[type="email"],
-input[type="password"] {
-  padding: 10px 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+.login-form input {
   width: 100%;
-  max-width: 400px;
-  margin-bottom: 10px;
+  padding: 8px;
+  margin: 10px 0;
 }
 
-/* Container */
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
+.login-form button {
+  padding: 10px;
+  width: 100%;
+  background: #1976d2;
+  color: white;
+  border: none;
+  cursor: pointer;
 }
 
-/* Header / Navbar */
+.error {
+  color: red;
+}
+
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: white;
-  padding: 12px 24px;
-  border-bottom: 1px solid #ddd;
+  padding: 1rem;
+  background: #1976d2;
+  color: white;
 }
 
-.navbar h1 {
-  font-size: 20px;
+.dashboard-container {
+  padding: 20px;
 }
 
-.navbar button {
-  background-color: #f44336;
+.upload-button {
+  margin-bottom: 20px;
 }
 
-.navbar button:hover {
-  background-color: #d32f2f;
-}
-
-/* Grid for files */
 .file-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 16px;
-  margin-top: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
 }
 
-/* File Card */
 .file-card {
-  background-color: white;
-  padding: 12px;
+  background: white;
+  padding: 10px;
   border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
   text-align: center;
-  word-wrap: break-word;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
 }
 
-.file-card:hover {
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-
-/* Upload button */
-.upload-container {
-  display: flex;
-  gap: 10px;
-  margin: 16px 0;
-}
-
-/* Charts */
-.charts-container {
+.charts {
   margin-top: 20px;
   background: white;
+  padding: 10px;
   border-radius: 8px;
-  padding: 16px;
-  text-align: center;
-}
-
-/* Responsive */
-@media(max-width: 768px) {
-  .file-grid {
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  }
-
-  .navbar h1 {
-    font-size: 18px;
-  }
-
-  .upload-container {
-    flex-direction: column;
-  }
 }
