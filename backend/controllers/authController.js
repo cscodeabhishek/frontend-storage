@@ -1,22 +1,19 @@
-// backend/controllers/authController.js
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 
-export const loginUser = async (req, res) => {
+export const login = async (req, res) => {
   const { email, password } = req.body;
 
-  try {
-    const user = await User.findOne({ email });
-    if (!user || user.password !== password) {
-      return res.status(401).json({ message: "Login failed" });
-    }
+  if (!email || !password)
+    return res.status(400).json({ message: "Email and password required" });
 
-    const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
+  const user = await User.findOne({ email });
+  if (!user) return res.status(401).json({ message: "Invalid email" });
 
-    res.json({ token, user: { email: user.email } });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
+  const isMatch = user.password === password; // Simple plain-text check (use bcrypt in production)
+  if (!isMatch) return res.status(401).json({ message: "Invalid password" });
+
+  const token = jwt.sign({ id: user._id, email: user.email }, "secretkey", { expiresIn: "1d" });
+
+  res.json({ token, email: user.email });
 };

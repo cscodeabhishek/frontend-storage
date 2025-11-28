@@ -2,27 +2,21 @@ import File from "../models/File.js";
 import path from "path";
 
 export const uploadFile = async (req, res) => {
-  try {
-    if (!req.file) return res.status(400).json({ message: "No file uploaded" });
+  if(!req.file) return res.status(400).json({ message: "No file uploaded" });
 
-    const file = new File({
-      filename: req.file.originalname,
-      path: req.file.path,
-      uploadedBy: req.user._id,
-    });
+  const file = new File({
+    name: req.file.originalname,
+    size: req.file.size,
+    type: req.file.mimetype,
+    path: req.file.path,
+    uploadedBy: req.user.id
+  });
 
-    await file.save();
-    res.json({ message: "File uploaded", file });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+  await file.save();
+  res.json({ message: "File uploaded successfully", file });
 };
 
 export const getFiles = async (req, res) => {
-  try {
-    const files = await File.find({ uploadedBy: req.user._id });
-    res.json(files);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+  const files = await File.find({ uploadedBy: req.user.id }).sort({ uploadedAt: -1 });
+  res.json(files);
 };
