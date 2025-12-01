@@ -1,23 +1,33 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import User from "./models/User.js";
+
 dotenv.config();
 
-const mongoURI = process.env.MONGO_URI;
+const start = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log("Connected to MongoDB!");
 
-mongoose.connect(mongoURI)
-  .then(async () => {
-    console.log("MongoDB connected");
+    // Remove old user
+    await User.deleteMany({ email: "admin@gmail.com" });
 
-    const user = new User({
+    // Create new user with name (required)
+    await User.create({
+      name: "Admin User",
       email: "admin@gmail.com",
-      password: "admin123" // for testing only; you can hash later
+      password: "admin123",
     });
 
-    await user.save();
-    console.log("User created!");
+    console.log("Admin user created:");
+    console.log("Email: admin@gmail.com");
+    console.log("Password: admin123");
+
     process.exit(0);
-  })
-  .catch(err => {
-    console.error("MongoDB connection error:", err);
-  });
+  } catch (error) {
+    console.error(error);
+    process.exit(1);
+  }
+};
+
+start();

@@ -1,35 +1,25 @@
-import React, { useEffect, useState } from "react";
-import Navbar from "../components/Navbar";
-import FileList from "../components/FileList";
-import UploadButton from "../components/UploadButton";
-import { useAuth } from "../context/AuthContext";
-import { getFiles } from "../api";
+import axios from "axios";
 
-const Dashboard = () => {
-  const { user } = useAuth();
-  const [files, setFiles] = useState([]);
+const handleUpload = async (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
 
-  const fetchFiles = async () => {
-    if(!user) return;
-    const data = await getFiles(user.token);
-    setFiles(data);
-  };
+  const token = localStorage.getItem("token");
 
-  useEffect(()=>{
-    fetchFiles();
-  }, [user]);
+  const formData = new FormData();
+  formData.append("file", file);
 
-  if(!user) return <p>Please login first.</p>;
+  try {
+    const res = await axios.post("http://localhost:5000/api/files/upload", formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    });
 
-  return (
-    <div>
-      <Navbar />
-      <div style={{ padding:"20px" }}>
-        <UploadButton onUpload={fetchFiles}/>
-        <FileList files={files} />
-      </div>
-    </div>
-  );
+    alert("Upload success");
+  } catch (err) {
+    console.error(err);
+    alert("Upload failed");
+  }
 };
-
-export default Dashboard;

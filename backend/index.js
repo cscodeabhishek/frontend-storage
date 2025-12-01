@@ -8,7 +8,7 @@ import bcrypt from "bcryptjs";
 
 // Import routes
 import authRoutes from "./routes/auth.js";
-import fileRoutes from "./routes/files.js";
+import fileRoutes from "./routes/filesrotes.js";
 import User from "./models/User.js";
 
 dotenv.config();
